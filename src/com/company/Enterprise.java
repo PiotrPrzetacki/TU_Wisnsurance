@@ -5,7 +5,7 @@ public class Enterprise extends Client{
     private String regon;
     private Person representative;
 
-    public Enterprise(Integer id, String address, String phone, String nip, String regon, Person representative) {
+    public Enterprise(Integer id, Address address, String phone, String nip, String regon, Person representative) {
         super(id, address, phone);
         this.nip = nip;
         this.regon = regon;

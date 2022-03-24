@@ -7,12 +7,24 @@ import java.util.List;
 
 public abstract class Client {
     protected Integer id;
-    protected String address;
+    protected Address address;
     protected String phone;
 
-    public Client(Integer id, String address, String phone) {
+    public Client(Integer id, Address address, String phone) {
         this.id = id;
         this.address = address;
+        this.phone = phone;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
