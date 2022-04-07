@@ -1,5 +1,5 @@
 package com.company;
 
 public enum PolicyTypes {
-    healthPolicy, lifeInsurancePolicy, propertyPolisy, motorPolicy
+    HEALTH_POLICY, LIFE_INSURANCE_POLICY, PROPERTY_POLICY, MOTOR_POLICY
 }

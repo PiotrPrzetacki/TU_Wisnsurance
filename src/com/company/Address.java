@@ -2,20 +2,22 @@ package com.company;
 
 public class Address {
 
+    private Integer id;
     private String country;
     private String zipCode;
     private String city;
     private String street;
     private String buildingNumber;
-    private String apartment_Number;
+    private String apartmentNumber;
 
-    public Address(String country, String zipCode, String city, String street, String buildingNumber, String apartment_Number) {
+    public Address(String country, String zipCode, String city, String street, String buildingNumber, String apartmentNumber) {
+        this.id = id;
         this.country = country;
         this.zipCode = zipCode;
         this.city = city;
         this.street = street;
         this.buildingNumber = buildingNumber;
-        this.apartment_Number = apartment_Number;
+        this.apartmentNumber = apartmentNumber;
     }
 
     public String getCountry() {
@@ -58,18 +60,18 @@ public class Address {
         this.buildingNumber = buildingNumber;
     }
 
-    public String getApartment_Number() {
-        return apartment_Number;
+    public String getApartmentNumber() {
+        return apartmentNumber;
     }
 
-    public void setApartment_Number(String apartment_Number) {
-        this.apartment_Number = apartment_Number;
+    public void setApartmentNumber(String apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
     }
 
     @Override
     public String toString(){
-        String address = this.getZipCode() + " " +this.getCity() + ", " + this.getStreet() + " " + this.getApartment_Number();
-        address += this.getApartment_Number() != null ? ("/"+this.getApartment_Number()) : "";
+        String address = this.getZipCode() + " " +this.getCity() + ", " + this.getStreet() + " " + this.getApartmentNumber();
+        address += this.getApartmentNumber() != null ? ("/"+this.getApartmentNumber()) : "";
         return address;
     }
 }
