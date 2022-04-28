@@ -52,4 +52,8 @@ public class DBConnection {
             }
         }
     }
+
+    public static Statement getStatement() {
+        return statement;
+    }
 }
