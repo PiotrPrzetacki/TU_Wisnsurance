@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS policy_types;
 create table policy_types
 (
 	id integer not null
@@ -6,9 +7,11 @@ create table policy_types
 	policy_type varchar(30) not null
 );
 
+DROP INDEX IF EXISTS policy_types_id_uindex;
 create unique index policy_types_id_uindex
 	on policy_types (id);
 
+DROP TABLE IF EXISTS risks;
 create table risks
 (
 	id integer not null
@@ -22,9 +25,11 @@ create table risks
 			references policy_types
 );
 
+DROP INDEX IF EXISTS risks_id_uindex;
 create unique index risks_id_uindex
 	on risks (id);
 
+DROP TABLE IF EXISTS addresses;
 create table addresses
 (
 	id integer not null
@@ -38,9 +43,11 @@ create table addresses
 	apartment_number varchar(20)
 );
 
+DROP INDEX IF EXISTS addresses_id_uindex;
 create unique index addresses_id_uindex
 	on addresses (id);
 
+DROP TABLE IF EXISTS people;
 create table people
 (
 	id integer not null
@@ -51,14 +58,16 @@ create table people
 	last_name varchar(30)
 );
 
+DROP INDEX IF EXISTS people_id_uindex;
 create unique index people_id_uindex
 	on people (id);
 
+DROP TABLE IF EXISTS enterprises;
 create table enterprises
 (
 	id integer not null
 		constraint enterprises_pk
-			primary key autoincrement
+			primary key autoincrement,
 	nip varchar(30),
 	regon varchar(30),
 	representative_id integer
@@ -66,6 +75,7 @@ create table enterprises
 			references people
 );
 
+DROP TABLE IF EXISTS clients;
 create table clients
 (
 	id integer not null
@@ -83,17 +93,18 @@ create table clients
 			references enterprises
 );
 
+DROP INDEX IF EXISTS clients_id_uindex;
 create unique index clients_id_uindex
 	on clients (id);
 
-
+DROP TABLE IF EXISTS damage_types;
 create table damage_types
 (
 	id integer,
 	damage_type varchar(50)
 );
 
-
+DROP TABLE IF EXISTS documents;
 create table documents
 (
 	id integer not null
@@ -102,10 +113,11 @@ create table documents
 	document_url varchar(100)
 );
 
+DROP INDEX IF EXISTS documents_id_uindex;
 create unique index documents_id_uindex
 	on documents (id);
 
-
+DROP TABLE IF EXISTS policies;;
 create table policies
 (
 	id integer not null
@@ -121,10 +133,11 @@ create table policies
 	is_active boolean default true
 );
 
+DROP INDEX IF EXISTS policies_id_uindex;
 create unique index policies_id_uindex
 	on policies (id);
 
-
+DROP TABLE IF EXISTS damages;
 create table damages
 (
 	id integer not null
@@ -139,10 +152,11 @@ create table damages
 			references clients
 );
 
+DROP INDEX IF EXISTS damages_id_uindex;
 create unique index damages_id_uindex
 	on damages (id);
 
-
+DROP TABLE IF EXISTS damages_documents;
 create table damages_documents
 (
 	id integer not null
@@ -156,10 +170,11 @@ create table damages_documents
 			references documents
 );
 
+DROP INDEX IF EXISTS damages_documents_id_uindex;
 create unique index damages_documents_id_uindex
 	on damages_documents (id);
 
-
+DROP TABLE IF EXISTS policies_risks;
 create table policies_risks
 (
 	id integer not null
@@ -173,6 +188,6 @@ create table policies_risks
 			references risks
 );
 
+DROP INDEX IF EXISTS policies_risks_id_uindex;
 create unique index policies_risks_id_uindex
 	on policies_risks (id);
-
