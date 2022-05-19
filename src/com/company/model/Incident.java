@@ -1,27 +1,24 @@
-package com.company;
+package com.company.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Incident {
-    private Integer id;
+    private UUID id;
     private Date date;
     private List<Damage> damages;
     private String place;
 
     public Incident(Integer id, Date date, List<Damage> damages, String place) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.date = date;
         this.damages = damages;
         this.place = place;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Date getDate() {

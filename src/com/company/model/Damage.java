@@ -1,28 +1,24 @@
-package com.company;
+package com.company.model;
 
-import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public class Damage {
-    private Integer id;
+    private UUID id;
     private Policy policy;
     private DamageTypes damageType;
     private Client victim;
     private Set<String> documents;
 
     public Damage(Integer id, Policy policy, DamageTypes damageType, Client victim) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.policy = policy;
         this.damageType = damageType;
         this.victim = victim;
     }
 
-    public Integer getId() {
+    public UUID getId() {
         return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Policy getPolicy() {

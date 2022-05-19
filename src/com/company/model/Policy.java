@@ -1,12 +1,13 @@
-package com.company;
+package com.company.model;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 public class Policy {
-    private Integer id;
+    private UUID id;
     private Client policyholder;
     private Client insured;
     private Client beneficiary;
@@ -17,8 +18,8 @@ public class Policy {
     private PolicyTypes policyType;
     private Boolean isActive;
 
-    public Policy(Integer id, Client policyholder, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, BigDecimal price, PolicyTypes policyType) {
-        this.id = id;
+    public Policy(Client policyholder, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, BigDecimal price, PolicyTypes policyType) {
+        this.id = UUID.randomUUID();
         this.policyholder = policyholder;
         this.insured = insured;
         this.beneficiary = beneficiary;

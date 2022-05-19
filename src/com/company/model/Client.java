@@ -1,23 +1,30 @@
-package com.company;
+package com.company.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.sql.SQLException;
+import java.util.*;
 
 public abstract class Client {
-    protected Integer id;
-    protected Address address;
-    protected String phone;
+    private UUID id;
+    private Address address;
+    private String phone;
 
-    public Client(Integer id, Address address, String phone) {
-        this.id = id;
+    public Client(Address address, String phone) {
+        this.id = UUID.randomUUID();
         this.address = address;
         this.phone = phone;
     }
 
-    public void setId(Integer id) {
+    public Client() {
+        this.id = UUID.randomUUID();
+    }
+
+    public void setId(UUID id) {
         this.id = id;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public void setAddress(Address address) {
@@ -29,7 +36,7 @@ public abstract class Client {
     }
 
     public Policy addPolicy(Integer id, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, BigDecimal price, PolicyTypes policyType){
-        return new Policy(id, this, insured, beneficiary, risks, duration_from, duration_to, price, policyType);
+        return new Policy(this, insured, beneficiary, risks, duration_from, duration_to, price, policyType);
     }
 
     public List<Policy> getPolicies(List<Policy> allPolicies){
@@ -46,6 +53,19 @@ public abstract class Client {
     public void cancelPolicy(Policy policy){
         if(policy.getPolicyholder() == this){
             policy.setActive(false);
+        }
+    }
+
+    public void save(){
+        try {
+            DBConnection.getStatement().execute(String.format(Locale.US,
+                    "INSERT INTO clients (id, address_id, phone) VALUES ('%s', '%s', '%s')",
+                    id.toString(),
+                    address.getId().toString(),
+                    phone
+            ));
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

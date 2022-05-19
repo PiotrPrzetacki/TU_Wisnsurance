@@ -1,8 +1,12 @@
-package com.company;
+package com.company.model;
+
+import java.sql.SQLException;
+import java.util.Locale;
+import java.util.UUID;
 
 public class Address {
 
-    private Integer id;
+    private UUID id;
     private String country;
     private String zipCode;
     private String city;
@@ -11,13 +15,17 @@ public class Address {
     private String apartmentNumber;
 
     public Address(String country, String zipCode, String city, String street, String buildingNumber, String apartmentNumber) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.country = country;
         this.zipCode = zipCode;
         this.city = city;
         this.street = street;
         this.buildingNumber = buildingNumber;
         this.apartmentNumber = apartmentNumber;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getCountry() {
@@ -73,5 +81,22 @@ public class Address {
         String address = this.getZipCode() + " " +this.getCity() + ", " + this.getStreet() + " " + this.getApartmentNumber();
         address += this.getApartmentNumber() != null ? ("/"+this.getApartmentNumber()) : "";
         return address;
+    }
+
+    public void save(){
+        try {
+            DBConnection.getStatement().execute(String.format(Locale.US,
+                    "INSERT INTO addresses VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                    id,
+                    country,
+                    zipCode,
+                    city,
+                    street,
+                    buildingNumber,
+                    apartmentNumber
+            ));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

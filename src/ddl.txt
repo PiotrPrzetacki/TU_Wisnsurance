@@ -1,28 +1,14 @@
-DROP TABLE IF EXISTS policy_types;
-create table policy_types
-(
-	id integer not null
-		constraint policy_types_pk
-			primary key autoincrement,
-	policy_type varchar(30) not null
-);
-
-DROP INDEX IF EXISTS policy_types_id_uindex;
-create unique index policy_types_id_uindex
-	on policy_types (id);
 
 DROP TABLE IF EXISTS risks;
 create table risks
 (
-	id integer not null
+	id varchar(30) not null
 		constraint risks_pk
-			primary key autoincrement,
+			primary key,
 	price_from float not null,
 	price_to float not null,
 	description varchar(255) not null,
-	policy_type_id integer not null
-		constraint risks_policy_types_id_fk
-			references policy_types
+	policy_type varchar(50) not null
 );
 
 DROP INDEX IF EXISTS risks_id_uindex;
@@ -32,9 +18,9 @@ create unique index risks_id_uindex
 DROP TABLE IF EXISTS addresses;
 create table addresses
 (
-	id integer not null
+	id varchar(30) not null
 		constraint addresses_pk
-			primary key autoincrement,
+			primary key,
 	country varchar(30) not null,
 	zip_code varchar(20) not null,
 	city varchar(30) not null,
@@ -50,9 +36,9 @@ create unique index addresses_id_uindex
 DROP TABLE IF EXISTS people;
 create table people
 (
-	id integer not null
+	id varchar(30) not null
 		constraint people_pk
-			primary key autoincrement,
+			primary key,
 	pesel varchar(20),
 	first_name varchar(30),
 	last_name varchar(30)
@@ -65,9 +51,9 @@ create unique index people_id_uindex
 DROP TABLE IF EXISTS enterprises;
 create table enterprises
 (
-	id integer not null
+	id varchar(30) not null
 		constraint enterprises_pk
-			primary key autoincrement,
+			primary key,
 	nip varchar(30),
 	regon varchar(30),
 	representative_id integer
@@ -78,14 +64,14 @@ create table enterprises
 DROP TABLE IF EXISTS clients;
 create table clients
 (
-	id integer not null
+	id varchar(30) not null
 		constraint clients_pk
-			primary key autoincrement,
-	address_id integer
+			primary key,
+	address_id varchar(30)
 		constraint clients_addresses_id_fk
 			references addresses,
 	phone varchar(30),
-	person_id integer
+	person_id varchar(30)
 		constraint clients_people_id_fk
 			references people,
 	enterprise_id integer
@@ -100,16 +86,16 @@ create unique index clients_id_uindex
 DROP TABLE IF EXISTS damage_types;
 create table damage_types
 (
-	id integer,
+	id varchar(30),
 	damage_type varchar(50)
 );
 
 DROP TABLE IF EXISTS documents;
 create table documents
 (
-	id integer not null
+	id varchar(30) not null
 		constraint documents_pk
-			primary key autoincrement,
+			primary key,
 	document_url varchar(100)
 );
 
@@ -117,37 +103,33 @@ DROP INDEX IF EXISTS documents_id_uindex;
 create unique index documents_id_uindex
 	on documents (id);
 
-DROP TABLE IF EXISTS policies;;
+DROP TABLE IF EXISTS policies;
 create table policies
 (
-	id integer not null
+	id varchar(30) not null
 		constraint policies_pk
-			primary key autoincrement,
-	policyholder_id integer,
-	insured_id integer,
-	beneficiary_id integer,
+			primary key,
+	policyholder_id varchar(30),
+	insured_id varchar(30),
+	beneficiary_id varchar(30),
 	duration_from date,
 	duration_to date,
 	price float,
-	policy_type integer,
+	policy_type varchar(50) not null,
 	is_active boolean default true
 );
-
-DROP INDEX IF EXISTS policies_id_uindex;
-create unique index policies_id_uindex
-	on policies (id);
 
 DROP TABLE IF EXISTS damages;
 create table damages
 (
-	id integer not null
+	id varchar(30) not null
 		constraint damages_pk
-			primary key autoincrement,
-	policy_id integer,
+			primary key,
+	policy_type varchar(50) not null,
 	damage_type integer
 		constraint damages_damage_types_id_fk
 			references damage_types (id),
-	victim_id integer
+	victim_id varchar(30)
 		constraint damages_clients_id_fk
 			references clients
 );
@@ -159,13 +141,13 @@ create unique index damages_id_uindex
 DROP TABLE IF EXISTS damages_documents;
 create table damages_documents
 (
-	id integer not null
+	id varchar(30) not null
 		constraint damages_documents_pk
-			primary key autoincrement,
-	damage_id integer not null
+			primary key,
+	damage_id varchar(30) not null
 		constraint damages_documents_damages_id_fk
 			references damages,
-	document_id integer not null
+	document_id varchar(30) not null
 		constraint damages_documents_documents_id_fk
 			references documents
 );
@@ -173,21 +155,3 @@ create table damages_documents
 DROP INDEX IF EXISTS damages_documents_id_uindex;
 create unique index damages_documents_id_uindex
 	on damages_documents (id);
-
-DROP TABLE IF EXISTS policies_risks;
-create table policies_risks
-(
-	id integer not null
-		constraint policies_risks_pk
-			primary key autoincrement,
-	policy_id integer not null
-		constraint policies_risks_policies_id_fk
-			references policies,
-	risk_id integer not null
-		constraint policies_risks_risks_id_fk
-			references risks
-);
-
-DROP INDEX IF EXISTS policies_risks_id_uindex;
-create unique index policies_risks_id_uindex
-	on policies_risks (id);
