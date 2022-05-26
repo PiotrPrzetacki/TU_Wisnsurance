@@ -31,6 +31,10 @@ public class Policy {
         this.isActive = true;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
     public void setPolicyholder(Client policyholder) {
         this.policyholder = policyholder;
     }

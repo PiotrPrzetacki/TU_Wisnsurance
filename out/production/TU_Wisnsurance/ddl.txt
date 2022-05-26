@@ -2,7 +2,7 @@
 DROP TABLE IF EXISTS risks;
 create table risks
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint risks_pk
 			primary key,
 	price_from float not null,
@@ -18,7 +18,7 @@ create unique index risks_id_uindex
 DROP TABLE IF EXISTS addresses;
 create table addresses
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint addresses_pk
 			primary key,
 	country varchar(30) not null,
@@ -36,7 +36,7 @@ create unique index addresses_id_uindex
 DROP TABLE IF EXISTS people;
 create table people
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint people_pk
 			primary key,
 	pesel varchar(20),
@@ -51,7 +51,7 @@ create unique index people_id_uindex
 DROP TABLE IF EXISTS enterprises;
 create table enterprises
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint enterprises_pk
 			primary key,
 	nip varchar(30),
@@ -64,7 +64,7 @@ create table enterprises
 DROP TABLE IF EXISTS clients;
 create table clients
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint clients_pk
 			primary key,
 	address_id varchar(30)
@@ -86,14 +86,14 @@ create unique index clients_id_uindex
 DROP TABLE IF EXISTS damage_types;
 create table damage_types
 (
-	id varchar(30),
+	id varchar(40),
 	damage_type varchar(50)
 );
 
 DROP TABLE IF EXISTS documents;
 create table documents
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint documents_pk
 			primary key,
 	document_url varchar(100)
@@ -106,7 +106,7 @@ create unique index documents_id_uindex
 DROP TABLE IF EXISTS policies;
 create table policies
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint policies_pk
 			primary key,
 	policyholder_id varchar(30),
@@ -122,7 +122,7 @@ create table policies
 DROP TABLE IF EXISTS damages;
 create table damages
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint damages_pk
 			primary key,
 	policy_type varchar(50) not null,
@@ -141,7 +141,7 @@ create unique index damages_id_uindex
 DROP TABLE IF EXISTS damages_documents;
 create table damages_documents
 (
-	id varchar(30) not null
+	id varchar(40) not null
 		constraint damages_documents_pk
 			primary key,
 	damage_id varchar(30) not null
@@ -155,3 +155,17 @@ create table damages_documents
 DROP INDEX IF EXISTS damages_documents_id_uindex;
 create unique index damages_documents_id_uindex
 	on damages_documents (id);
+
+DROP TABLE IF EXISTS policies_risks;
+create table policies_risks
+(
+	id varchar(40) not null
+		constraint policies_risks_pk
+			primary key,
+	policy_id integer not null
+		constraint policies_risks_policies_id_fk
+			references policies,
+	risk_id integer not null
+		constraint policies_risks_risks_id_fk
+			references risks
+);

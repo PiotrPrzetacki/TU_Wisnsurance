@@ -23,7 +23,6 @@ public class Person extends Client {
 
     public Person() {
         super();
-        this.personId = UUID.randomUUID();
     }
 
     public void save(){
@@ -57,5 +56,25 @@ public class Person extends Client {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setPersonId(UUID personId) {
+        this.personId = personId;
+    }
+
+    public String getPesel() {
+        return pesel;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public UUID getPersonId() {
+        return personId;
     }
 }
