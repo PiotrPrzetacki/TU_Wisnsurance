@@ -15,7 +15,6 @@ public class Address {
     private String apartmentNumber;
 
     public Address(String country, String zipCode, String city, String street, String buildingNumber, String apartmentNumber) {
-        this.id = UUID.randomUUID();
         this.country = country;
         this.zipCode = zipCode;
         this.city = city;
@@ -84,6 +83,7 @@ public class Address {
     }
 
     public void save(){
+        this.id = UUID.randomUUID();
         try {
             DBConnection.getStatement().execute(String.format(Locale.US,
                     "INSERT INTO addresses VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')",

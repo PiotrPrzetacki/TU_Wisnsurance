@@ -11,7 +11,6 @@ public class Incident {
     private String place;
 
     public Incident(Integer id, Date date, List<Damage> damages, String place) {
-        this.id = UUID.randomUUID();
         this.date = date;
         this.damages = damages;
         this.place = place;

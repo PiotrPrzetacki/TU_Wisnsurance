@@ -1,10 +1,8 @@
 package com.company.model;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Policy {
     private UUID id;
@@ -14,12 +12,14 @@ public class Policy {
     private List<Risk> risks;
     private Date duration_from;
     private Date duration_to;
-    private BigDecimal price;
+    private Double price;
     private PolicyTypes policyType;
     private Boolean isActive;
 
-    public Policy(Client policyholder, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, BigDecimal price, PolicyTypes policyType) {
-        this.id = UUID.randomUUID();
+    public Policy() {
+    }
+
+    public Policy(Client policyholder, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, Double price, PolicyTypes policyType) {
         this.policyholder = policyholder;
         this.insured = insured;
         this.beneficiary = beneficiary;
@@ -29,6 +29,38 @@ public class Policy {
         this.price = price;
         this.policyType = policyType;
         this.isActive = true;
+    }
+
+    public void setPolicyholder(Client policyholder) {
+        this.policyholder = policyholder;
+    }
+
+    public void setInsured(Client insured) {
+        this.insured = insured;
+    }
+
+    public void setBeneficiary(Client beneficiary) {
+        this.beneficiary = beneficiary;
+    }
+
+    public void setRisks(List<Risk> risks) {
+        this.risks = risks;
+    }
+
+    public void setDuration_from(Date duration_from) {
+        this.duration_from = duration_from;
+    }
+
+    public void setDuration_to(Date duration_to) {
+        this.duration_to = duration_to;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public void setPolicyType(PolicyTypes policyType) {
+        this.policyType = policyType;
     }
 
     public Client getPolicyholder() {
@@ -59,5 +91,26 @@ public class Policy {
             }
         }
         return availableRisks;
+    }
+
+    public void save(){
+        this.id = UUID.randomUUID();
+        String d_from = new SimpleDateFormat("yyyy-MM-dd").format(duration_from);
+        String d_to = new SimpleDateFormat("yyyy-MM-dd").format(duration_to);
+        try {
+            DBConnection.getStatement().execute(String.format(Locale.US,
+                    "INSERT INTO policies(id, policyholder_id, insured_id, beneficiary_id, duration_from, duration_to, price, policy_type) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', %f, '%s')",
+                    id,
+                    policyholder.getId(),
+                    insured.getId(),
+                    beneficiary.getId(),
+                    d_from,
+                    d_to,
+                    price,
+                    policyType
+            ));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

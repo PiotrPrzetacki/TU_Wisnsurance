@@ -12,7 +12,6 @@ public class Risk {
     private PolicyTypes policyType;
 
     public Risk(Double priceFrom, Double priceTo, String description, PolicyTypes policyType) {
-        this.id = UUID.randomUUID();
         this.priceFrom = priceFrom;
         this.priceTo = priceTo;
         this.description = description;
@@ -28,6 +27,7 @@ public class Risk {
     }
 
     public void save(){
+        this.id = UUID.randomUUID();
         try {
             DBConnection.getStatement().execute(String.format(Locale.US,
                     "INSERT INTO risks VALUES ('%s', %f, %f, '%s', '%s')",

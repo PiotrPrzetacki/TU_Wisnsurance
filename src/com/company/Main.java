@@ -1,11 +1,10 @@
 package com.company;
 
-import com.company.model.Address;
-import com.company.model.Person;
-import com.company.model.PolicyTypes;
-import com.company.model.Risk;
+import com.company.model.*;
 
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
 import static com.company.model.DBConnection.*;
 
@@ -32,6 +31,17 @@ public class Main {
         person.setFirstName("Jan");
         person.setLastName("Kowalski");
         person.save();
+
+        Policy policy = new Policy();
+        policy.setPolicyholder(person);
+        policy.setInsured(person);
+        policy.setBeneficiary(person);
+        policy.setDuration_from(new Date());
+        policy.setDuration_to(new Date(2024-1900, Calendar.NOVEMBER, 10));
+        policy.setPrice(1000d);
+        policy.setPolicyType(PolicyTypes.HEALTH_POLICY);
+
+        policy.save();
 
         disconnect();
     }

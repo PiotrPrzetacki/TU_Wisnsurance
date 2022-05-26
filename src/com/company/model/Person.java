@@ -16,7 +16,6 @@ public class Person extends Client {
 
     public Person(Address address, String phone, String pesel, String firstName, String lastName) {
         super(address, phone);
-        this.personId = UUID.randomUUID();
         this.pesel = pesel;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -29,6 +28,7 @@ public class Person extends Client {
 
     public void save(){
         super.save();
+        this.personId = UUID.randomUUID();
         try {
             DBConnection.getStatement().execute(String.format(Locale.US,
                     "UPDATE clients SET person_id='%s' WHERE id='%s'",

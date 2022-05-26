@@ -11,7 +11,6 @@ public class Damage {
     private Set<String> documents;
 
     public Damage(Integer id, Policy policy, DamageTypes damageType, Client victim) {
-        this.id = UUID.randomUUID();
         this.policy = policy;
         this.damageType = damageType;
         this.victim = victim;

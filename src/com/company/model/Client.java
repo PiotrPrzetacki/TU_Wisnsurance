@@ -1,6 +1,5 @@
 package com.company.model;
 
-import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -10,7 +9,6 @@ public abstract class Client {
     private String phone;
 
     public Client(Address address, String phone) {
-        this.id = UUID.randomUUID();
         this.address = address;
         this.phone = phone;
     }
@@ -35,7 +33,7 @@ public abstract class Client {
         this.phone = phone;
     }
 
-    public Policy addPolicy(Integer id, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, BigDecimal price, PolicyTypes policyType){
+    public Policy addPolicy(Integer id, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, Double price, PolicyTypes policyType){
         return new Policy(this, insured, beneficiary, risks, duration_from, duration_to, price, policyType);
     }
 
@@ -57,6 +55,7 @@ public abstract class Client {
     }
 
     public void save(){
+        this.id = UUID.randomUUID();
         try {
             DBConnection.getStatement().execute(String.format(Locale.US,
                     "INSERT INTO clients (id, address_id, phone) VALUES ('%s', '%s', '%s')",
