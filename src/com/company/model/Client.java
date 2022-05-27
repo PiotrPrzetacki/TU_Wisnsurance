@@ -1,6 +1,10 @@
 package com.company.model;
 
+import com.company.DBConnection;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 public abstract class Client {
@@ -29,12 +33,16 @@ public abstract class Client {
         this.address = address;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public Address getAddress() {
+        return address;
     }
 
-    public Policy addPolicy(Integer id, Client insured, Client beneficiary, List<Risk> risks, Date duration_from, Date duration_to, Double price, PolicyTypes policyType){
-        return new Policy(this, insured, beneficiary, risks, duration_from, duration_to, price, policyType);
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public List<Policy> getPolicies(List<Policy> allPolicies){
@@ -55,14 +63,26 @@ public abstract class Client {
     }
 
     public void save(){
-        this.id = UUID.randomUUID();
         try {
-            DBConnection.getStatement().execute(String.format(Locale.US,
-                    "INSERT INTO clients (id, address_id, phone) VALUES ('%s', '%s', '%s')",
-                    id.toString(),
-                    address.getId().toString(),
-                    phone
-            ));
+            ResultSet rs = DBConnection.getStatement().executeQuery("SELECT COUNT(*) FROM clients WHERE id='"+id+"'");
+            rs.next();
+            if(rs.getInt(1)==0) {
+                this.id = UUID.randomUUID();
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "INSERT INTO clients (id, address_id, phone) VALUES ('%s', '%s', '%s')",
+                        id,
+                        address.getId().toString(),
+                        phone
+                ));
+            }
+            else{
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "UPDATE clients SET address_id='%s', phone='%s' WHERE id='%s'",
+                        address.getId(),
+                        phone,
+                        id
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

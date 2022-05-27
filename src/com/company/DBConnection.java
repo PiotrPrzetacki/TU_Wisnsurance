@@ -1,4 +1,4 @@
-package com.company.model;
+package com.company;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -55,5 +55,16 @@ public class DBConnection {
 
     public static Statement getStatement() {
         return statement;
+    }
+
+    public static Statement getNewStatement(){
+        if(connection!=null) {
+            try {
+                return connection.createStatement();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

@@ -1,30 +1,58 @@
 package com.company.model;
 
-import java.util.Date;
+import com.company.DBConnection;
+
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Incident {
     private UUID id;
-    private Date date;
+    private LocalDate date;
     private List<Damage> damages;
-    private String place;
+    private Address place;
 
-    public Incident(Integer id, Date date, List<Damage> damages, String place) {
+    public Incident(Integer id, LocalDate date, List<Damage> damages, Address place) {
         this.date = date;
         this.damages = damages;
         this.place = place;
+    }
+
+    public Incident() {
+    }
+
+    public void save(){
+        this.id = UUID.randomUUID();
+        try {
+            DBConnection.getStatement().execute(String.format(
+                    "INSERT INTO incidents VALUES ('%s', '%s', '%s')",
+                    id,
+                    date,
+                    place.getId()
+            ));
+            for(Damage damage : damages){
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "INSERT INTO incidents_damages VALUES ('%s', '%s')",
+                        id,
+                        damage.getId()
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public UUID getId() {
         return id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -36,11 +64,11 @@ public class Incident {
         this.damages = damages;
     }
 
-    public String getPlace() {
+    public Address getPlace() {
         return place;
     }
 
-    public void setPlace(String place) {
+    public void setPlace(Address place) {
         this.place = place;
     }
 }

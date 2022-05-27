@@ -19,5 +19,35 @@ public class Enterprise extends Client{
         super();
     }
 
+    public String getNip() {
+        return nip;
+    }
 
+    public void setNip(String nip) {
+        this.nip = nip;
+    }
+
+    public String getRegon() {
+        return regon;
+    }
+
+    public void setRegon(String regon) {
+        this.regon = regon;
+    }
+
+    public Person getRepresentative() {
+        return representative;
+    }
+
+    public void setRepresentative(Person representative) {
+        this.representative = representative;
+    }
+
+    public UUID getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(UUID enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
 }

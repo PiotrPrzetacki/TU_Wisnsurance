@@ -1,5 +1,8 @@
 package com.company.model;
 
+import com.company.DBConnection;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.UUID;
@@ -27,16 +30,30 @@ public class Risk {
     }
 
     public void save(){
-        this.id = UUID.randomUUID();
         try {
-            DBConnection.getStatement().execute(String.format(Locale.US,
-                    "INSERT INTO risks VALUES ('%s', %f, %f, '%s', '%s')",
-                    id.toString(),
-                    priceFrom,
-                    priceTo,
-                    description,
-                    policyType
-            ));
+            ResultSet rs = DBConnection.getStatement().executeQuery("SELECT COUNT(*) FROM risks WHERE id='"+id+"'");
+            rs.next();
+            if(rs.getInt(1)==0) {
+                this.id = UUID.randomUUID();
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "INSERT INTO risks VALUES ('%s', %f, %f, '%s', '%s')",
+                        id,
+                        priceFrom,
+                        priceTo,
+                        description,
+                        policyType
+                ));
+            }
+            else{
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "UPDATE risks SET price_from=%f, price_to=%f, description='%s', policy_type='%s' WHERE id='%s'",
+                        priceFrom,
+                        priceTo,
+                        description,
+                        policyType,
+                        id
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +71,38 @@ public class Risk {
         this.description = description;
     }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public Double getPriceFrom() {
+        return priceFrom;
+    }
+
+    public Double getPriceTo() {
+        return priceTo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public void setPolicyType(PolicyTypes policyType) {
         this.policyType = policyType;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+        return "Risk{" +
+                "id=" + id +
+                ", priceFrom=" + priceFrom +
+                ", priceTo=" + priceTo +
+                ", description='" + description + '\'' +
+                ", policyType=" + policyType +
+                '}';
     }
 }

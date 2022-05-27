@@ -1,5 +1,10 @@
 package com.company.model;
 
+import com.company.DBConnection;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -8,12 +13,51 @@ public class Damage {
     private Policy policy;
     private DamageTypes damageType;
     private Client victim;
-    private Set<String> documents;
+    private Set<Document> documents;
 
-    public Damage(Integer id, Policy policy, DamageTypes damageType, Client victim) {
+    public Damage(Policy policy, DamageTypes damageType, Client victim, Set<Document> documents) {
         this.policy = policy;
         this.damageType = damageType;
         this.victim = victim;
+        this.documents = documents;
+    }
+
+    public Damage() {
+    }
+
+    public void save(){
+        try {
+            ResultSet rs = DBConnection.getStatement().executeQuery("SELECT COUNT(*) FROM damages WHERE id='"+id+"'");
+            rs.next();
+            if(rs.getInt(1)==0) {
+                this.id = UUID.randomUUID();
+                DBConnection.getStatement().execute(String.format(
+                        "INSERT INTO damages VALUES ('%s', '%s', '%s', '%s')",
+                        id,
+                        policy.getId(),
+                        damageType,
+                        victim.getId()
+                ));
+                for (Document document : documents) {
+                    DBConnection.getStatement().execute(String.format(Locale.US,
+                            "INSERT INTO damages_documents VALUES ('%s', '%s')",
+                            id,
+                            document.getId()
+                    ));
+                }
+            }
+            else{
+                DBConnection.getStatement().execute(String.format(
+                        "UPDATE damages SET policy_id='%s', damage_type='%s', victim_id='%s' WHERE id='%s'",
+                        policy.getId(),
+                        damageType,
+                        victim.getId(),
+                        id
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public UUID getId() {
@@ -44,24 +88,12 @@ public class Damage {
         this.victim = victim;
     }
 
-    public Set<String> getDocuments() {
+    public Set<Document> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Set<String> documents) {
+    public void setDocuments(Set<Document> documents) {
         this.documents = documents;
-    }
-
-    public void addDocument(String document){
-        Set<String> newDocuments = this.getDocuments();
-        newDocuments.add(document);
-        this.setDocuments(newDocuments);
-    }
-
-    public void deleteDocument(String document){
-        Set<String> documents = this.getDocuments();
-        documents.remove(document);
-        this.setDocuments(documents);
     }
 
 }

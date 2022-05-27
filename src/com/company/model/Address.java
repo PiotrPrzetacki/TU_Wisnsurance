@@ -1,5 +1,8 @@
 package com.company.model;
 
+import com.company.DBConnection;
+
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.UUID;
@@ -87,18 +90,34 @@ public class Address {
     }
 
     public void save(){
-        this.id = UUID.randomUUID();
         try {
-            DBConnection.getStatement().execute(String.format(Locale.US,
-                    "INSERT INTO addresses VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                    id,
-                    country,
-                    zipCode,
-                    city,
-                    street,
-                    buildingNumber,
-                    apartmentNumber
-            ));
+            ResultSet rs = DBConnection.getStatement().executeQuery("SELECT COUNT(*) FROM addresses WHERE id='"+id+"'");
+            rs.next();
+            if(rs.getInt(1)==0) {
+                this.id = UUID.randomUUID();
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "INSERT INTO addresses VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                        id,
+                        country,
+                        zipCode,
+                        city,
+                        street,
+                        buildingNumber,
+                        apartmentNumber
+                ));
+            }
+            else{
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "UPDATE addresses SET country='%s', zip_code='%s', city='%s', street='%s', building_number='%s', apartment_number='%s' WHERE id='%s'",
+                        country,
+                        zipCode,
+                        city,
+                        street,
+                        buildingNumber,
+                        apartmentNumber,
+                        id
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

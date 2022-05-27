@@ -83,13 +83,6 @@ DROP INDEX IF EXISTS clients_id_uindex;
 create unique index clients_id_uindex
 	on clients (id);
 
-DROP TABLE IF EXISTS damage_types;
-create table damage_types
-(
-	id varchar(40),
-	damage_type varchar(50)
-);
-
 DROP TABLE IF EXISTS documents;
 create table documents
 (
@@ -125,10 +118,9 @@ create table damages
 	id varchar(40) not null
 		constraint damages_pk
 			primary key,
-	policy_type varchar(50) not null,
-	damage_type integer
-		constraint damages_damage_types_id_fk
-			references damage_types (id),
+	policy_id varchar(40) not null
+	    references policies,
+	damage_type varchar(50) not null,
 	victim_id varchar(40)
 		constraint damages_clients_id_fk
 			references clients
@@ -141,9 +133,6 @@ create unique index damages_id_uindex
 DROP TABLE IF EXISTS damages_documents;
 create table damages_documents
 (
-	id varchar(40) not null
-		constraint damages_documents_pk
-			primary key,
 	damage_id varchar(40) not null
 		constraint damages_documents_damages_id_fk
 			references damages,
@@ -152,20 +141,36 @@ create table damages_documents
 			references documents
 );
 
-DROP INDEX IF EXISTS damages_documents_id_uindex;
-create unique index damages_documents_id_uindex
-	on damages_documents (id);
-
 DROP TABLE IF EXISTS policies_risks;
 create table policies_risks
 (
-	id varchar(40) not null
-		constraint policies_risks_pk
-			primary key,
-	policy_id integer not null
+	policy_id varchar(40) not null
 		constraint policies_risks_policies_id_fk
 			references policies,
-	risk_id integer not null
+	risk_id varchar(40) not null
 		constraint policies_risks_risks_id_fk
 			references risks
+);
+
+DROP TABLE IF EXISTS incidents;
+create table incidents
+(
+    id varchar(40) not null
+        constraint incidents_pk
+            primary key,
+    incident_date date,
+    address_id varchar(40)
+        constraint incidents_addresses_id_fk
+            references addresses
+);
+
+DROP TABLE IF EXISTS incidents_damages;
+create table incidents_damages
+(
+    incident_id varchar(40) not null
+    		constraint incidents_damages_incidents_id_fk
+    			references incidents,
+    damage_id varchar(40) not null
+        constraint incidents_damages_damages_id_fk
+            references damages
 );

@@ -1,9 +1,8 @@
 package com.company.model;
 
-import com.company.model.Address;
-import com.company.model.Client;
-import com.company.model.DBConnection;
+import com.company.DBConnection;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.UUID;
@@ -27,20 +26,33 @@ public class Person extends Client {
 
     public void save(){
         super.save();
-        this.personId = UUID.randomUUID();
         try {
-            DBConnection.getStatement().execute(String.format(Locale.US,
-                    "UPDATE clients SET person_id='%s' WHERE id='%s'",
-                    personId.toString(),
-                    getId().toString()
-            ));
-            DBConnection.getStatement().execute(String.format(Locale.US,
-                    "INSERT INTO people (id, pesel, first_name, last_name) VALUES ('%s', '%s', '%s', '%s')",
-                    personId.toString(),
-                    pesel,
-                    firstName,
-                    lastName
-            ));
+            ResultSet rs = DBConnection.getStatement().executeQuery("SELECT COUNT(*) FROM people WHERE id='"+personId+"'");
+            rs.next();
+            if(rs.getInt(1)==0) {
+                this.personId = UUID.randomUUID();
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "UPDATE clients SET person_id='%s' WHERE id='%s'",
+                        personId,
+                        getId().toString()
+                ));
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "INSERT INTO people VALUES ('%s', '%s', '%s', '%s')",
+                        personId.toString(),
+                        pesel,
+                        firstName,
+                        lastName
+                ));
+            }
+            else{
+                DBConnection.getStatement().execute(String.format(Locale.US,
+                        "UPDATE people SET pesel='%s', first_name='%s', last_name='%s' WHERE id='%s'",
+                        pesel,
+                        firstName,
+                        lastName,
+                        personId
+                ));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
